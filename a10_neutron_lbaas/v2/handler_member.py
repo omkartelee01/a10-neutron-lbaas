@@ -56,6 +56,9 @@ class MemberHandler(handler_base_v2.HandlerBaseV2):
             status = c.client.slb.DOWN
         os_name = member.name
 
+        templates = c.device_cfg.get('templates')
+        server_templates = templates.get("server", None)
+
         try:
             server_args = self.meta(member, 'server', {})
             if conn_limit is not None:
@@ -78,6 +81,7 @@ class MemberHandler(handler_base_v2.HandlerBaseV2):
 
             c.client.slb.server.create(server_name, server_ip,
                                        status=status,
+                                       server_templates=server_templates,
                                        config_defaults=self._get_config_defaults(c, os_name),
                                        axapi_args=server_args)
 

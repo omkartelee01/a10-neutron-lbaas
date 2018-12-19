@@ -174,6 +174,9 @@ class ListenerHandler(handler_base_v2.HandlerBaseV2):
         if "no-dest-nat" in template_args and protocol.lower() in ("http", "https"):
             del template_args["no-dest-nat"]
 
+        conf_templates = c.device_cfg.get('templates')
+        virtual_port_templates = conf_templates.get("virtual-port", None)
+
         try:
 
             set_method(
@@ -192,6 +195,7 @@ class ListenerHandler(handler_base_v2.HandlerBaseV2):
                 no_dest_nat=c.device_cfg.get('no-dest-nat'),
                 conn_limit=c.device_cfg.get('conn-limit'),
                 # Device-level defaults
+                virtual_port_templates=virtual_port_templates,
                 vport_defaults=vport_defaults,
                 axapi_body=vport_meta,
                 **template_args)
