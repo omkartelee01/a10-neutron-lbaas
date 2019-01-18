@@ -29,6 +29,8 @@ class LoadbalancerHandler(handler_base_v2.HandlerBaseV2):
         if not lb.admin_state_up:
             status = c.client.slb.DOWN
 
+        templates = c.device_cfg.get('templates')
+        virtual_server_templates = templates.get("virtual-server", None)
         try:
             vip_meta = self.meta(lb, 'virtual_server', {})
             os_name = lb.name
@@ -37,6 +39,8 @@ class LoadbalancerHandler(handler_base_v2.HandlerBaseV2):
                 lb.vip_address,
                 arp_disable=c.device_cfg.get('arp_disable'),
                 status=status,
+                status,
+                virtual_server_templates=virtual_server_templates,
                 vrid=c.device_cfg.get('default_virtual_server_vrid'),
                 template_virtual_server=c.device_cfg.get('template-virtual-server'),
                 config_defaults=self._get_config_defaults(c, os_name),
